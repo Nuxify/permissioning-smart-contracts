@@ -16,54 +16,20 @@ describes how to use the contracts for onchain permissioning with Besu.
 
 We recommend you use the latest released version of this project.
 
-## Development
-_Note: The build process for the Dapp is currently not supported on Windows. Please use the provided distribution available at the [projects release page](https://github.com/PegaSysEng/permissioning-smart-contracts/releases/latest) if on Windows._
+## Compiling
 
-### Initialize dependencies ###
-Run `yarn install` to initialize project dependencies. This step is only required when setting up the project
-for the first time.
+In the base directory we use the node 19 Docker container to compile the smart contracts. Run the following command and wait until it ends:
 
-### Linting
-Linting is set up for contracts using `solium`, and for source files using `prettier`. To run linting over your code execute `yarn run lint`.
+```sh
+docker run --rm --entrypoint=/bin/sh --workdir=/tmp/permissioning-smart-contracts --volume=$PWD:/opt/permissioning-smart-contracts node:19-alpine3.16 -c \
+  "cp -r /opt/permissioning-smart-contracts/. .; \
+   apk add --no-cache git &>/dev/null && npm install --location=global truffle &>/dev/null; \
+   npm install &>/dev/null; \
+   truffle compile &>/dev/null; \
+   tar -cf abis.tar abis/ && cat abis.tar" | tar xf -
+```
 
-### Testing
-`yarn test`
-
-### Permissioning Management Dapp
-
-The Dapp will facilitate managing permissioning rules and maintaining the list of admin accounts that can edit rules.
-
-Note: if you want to run against Besu, follow the Besu docs.
-
-ONLY use these instructions if you are doing development work on the Dapp itself, in which case connecting to a development server (Ganache) will enable faster development.
-
-This is the easiest way to get started for development with the permissioning Dapp:
-
-#### Compile and migrate the contracts (Development mode) ####
-1. Delete your environment variables named `NODE_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_INGRESS_CONTRACT_ADDRESS`, `ACCOUNT_STORAGE_CONTRACT_ADDRESS`, `NODE_STORAGE_CONTRACT_ADDRESS` AND
-`CHAIN_ID` - you might need to restart your terminal session to have your changes applied. If you are using a `.env` file, you can comment out the variables.
-2. Start a terminal session and start a Truffle Ganache node running `truffle develop`. This will start a Ganache node and create a Truffle console session.
-3. In the truffle console, run all migrations from scratch with `migrate --reset`. Keep this terminal session open to maintain your Ganache node running.
-
-#### Start the development server ####
-1. Run `yarn run build` to build the Dapp.
-2. Run `yarn run start` to start the web server that is serving our Dapp.
-3. In your browser, connect MetaMask to the Ganache network (the default endpoint is `http://127.0.0.1:9545/`)
-4. When you start Ganache, it gives you a list of accounts and private keys. Import the first one in MetaMask to impersonate the first admin of the system.
-5. Navigate to `http://localhost:3000` to access the Permissioning Dapp.
-6. All changes made to the smart contracts or to the Dapp code are automatically refreshed on the website. There is no need to restart the web server after making changes.
-
-#### Snapshots ####
-Snapshots are compared as part of the test suite, to check any changes made to the Dapp are sensible. If you change the Dapp, you also need to update the snapshots.
-1. `yarn jest -u`
-2. or if using npm: `npm run test:app -- -u`
-
-#### Build the permissioning Dapp for deployment ####
-
-1. [Compile and migrate the contracts](#deploying-the-contracts)
-2. Run `yarn run build` will assemble index.html and all other files in `build/`
-3. You can use your preferred web server technology to serve the contents of `build/` as static files.
-4. You will need to set up MetaMask as for [the development server](#start-the-development-server)
+This will generate the output in the `abis` directory.
 
 ## Deployment
 
