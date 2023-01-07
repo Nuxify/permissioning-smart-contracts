@@ -44,8 +44,16 @@ This will generate the output in the `abis` directory.
   - `INITIAL_ADMIN_ACCOUNTS`: The admin account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_ACCOUNTS`: The permitted account addresses. Comma-separated multiple addresses can be specified
   - `INITIAL_ALLOWLISTED_NODES`: The enode URLs of permitted nodes. Comma-separated multiple nodes can be specified
-4. If this is the first time setting up the project, run `yarn install` to initialize project dependencies, otherwise skip this step
-5. With these environment variables provided run `truffle migrate --reset` to deploy the contracts
+
+After having created the `.env` file, in the base directory, we use the node 19 Docker container to deploy the already compiled contacts from the previous step with the following command:
+
+```sh
+docker run --rm --network=host --entrypoint=/bin/sh --workdir=/tmp/permissioning-smart-contracts --volume=$PWD:/opt/permissioning-smart-contracts node:19-alpine3.16 -c \
+  "cp -r /opt/permissioning-smart-contracts/. .; \
+   apk add --no-cache git && npm install --location=global truffle; \
+   npm install; \
+   truffle migrate --compile-none --network qbft_network"
+```
 
 ### Deploying the Dapp
 1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/ConsenSys/permissioning-smart-contracts/releases/latest)
