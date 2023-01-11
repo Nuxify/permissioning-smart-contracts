@@ -30,7 +30,7 @@ docker run --rm --entrypoint=/bin/sh --workdir=/tmp/permissioning-smart-contract
    tar -cf chain.tar dapp/src/chain/ && cat chain.tar" | tar xf -
 ```
 
-This will generate the output in the `abis` directory.
+This will generate the output in the `dapp/src/chain` directory.
 
 ## Deployment
 
