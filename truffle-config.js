@@ -30,7 +30,7 @@ module.exports = {
     }
   },
 
-  contracts_build_directory: path.join(__dirname, "abis"),
+  contracts_build_directory: path.join(__dirname, "dapp/src/chain/abis"),
 
   compilers: {
     solc: {

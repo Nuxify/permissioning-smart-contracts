@@ -23,10 +23,11 @@ In the base directory we use the node 19 Docker container to compile the smart c
 ```sh
 docker run --rm --entrypoint=/bin/sh --workdir=/tmp/permissioning-smart-contracts --volume=$PWD:/opt/permissioning-smart-contracts node:19-alpine3.16 -c \
   "cp -r /opt/permissioning-smart-contracts/. .; \
-   apk add --no-cache git &>/dev/null && npm install --location=global truffle &>/dev/null; \
+   apk add --no-cache git &>/dev/null && npm install --location=global truffle typechain &>/dev/null; \
    npm install &>/dev/null; \
    truffle compile &>/dev/null; \
-   tar -cf abis.tar abis/ && cat abis.tar" | tar xf -
+   typechain --target web3-v1 --out-dir ./dapp/src/chain/@types './dapp/src/chain/abis/*.json' &>/dev/null; \
+   tar -cf chain.tar dapp/src/chain/ && cat chain.tar" | tar xf -
 ```
 
 This will generate the output in the `abis` directory.
