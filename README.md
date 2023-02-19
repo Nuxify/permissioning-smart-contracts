@@ -16,25 +16,9 @@ describes how to use the contracts for onchain permissioning with Besu.
 
 We recommend you use the latest released version of this project.
 
-## Compiling
-
-In the base directory we use the node 19 Docker container to compile the smart contracts. Run the following command and wait until it ends:
-
-```sh
-docker run --rm --entrypoint=/bin/sh --workdir=/tmp/permissioning-smart-contracts --volume=$PWD:/opt/permissioning-smart-contracts node:19-alpine3.16 -c \
-  "cp -r /opt/permissioning-smart-contracts/. .; \
-   apk add --no-cache git &>/dev/null && npm install --location=global truffle typechain &>/dev/null; \
-   npm install &>/dev/null; \
-   truffle compile &>/dev/null; \
-   typechain --target web3-v1 --out-dir ./dapp/src/chain/@types './dapp/src/chain/abis/*.json' &>/dev/null; \
-   tar -cf chain.tar dapp/src/chain/ && cat chain.tar" | tar xf -
-```
-
-This will generate the output in the `dapp/src/chain` directory.
-
 ## Deployment
 
-### Deploying the contracts
+### Compiling and deploying the contracts
 1. The [Besu documentation](https://besu.hyperledger.org/en/stable/Tutorials/Permissioning/Getting-Started-Onchain-Permissioning/)
    describes how to use the contracts for onchain permissioning with Besu, including setting environment variables.
 2. The following additional environment variables are optional and can be used to prevent redeployment of rules contracts. If set to true, that contract will not be redeployed and current list data will be preserved. If absent or not set to `true`, the specified contract will be redeployed. This allows you, for instance, to retain the Admin contract while redeploying NodeRules and AccountRules, or any other combination.
@@ -53,7 +37,8 @@ docker run --rm --network=host --entrypoint=/bin/sh --workdir=/tmp/permissioning
   "cp -r /opt/permissioning-smart-contracts/. .; \
    apk add --no-cache git && npm install --location=global truffle; \
    npm install; \
-   truffle migrate --compile-none --network qbft_network"
+   truffle migrate --network qbft_network; \
+   cp -r dapp/src/abis /opt/permissioning-smart-contracts/dapp/src/abis"
 ```
 
 ### Deploying the Dapp

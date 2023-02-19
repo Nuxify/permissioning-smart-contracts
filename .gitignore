@@ -7,7 +7,7 @@ node_modules/
 package-lock.json
 
 # Generated files
-dapp/src/chain/
+dapp/src/abis/
 
 # dotenv environment variables file
 .env
