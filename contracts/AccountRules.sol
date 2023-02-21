@@ -27,7 +27,7 @@ contract AccountRules is AccountRulesProxy, AccountRulesList {
     // this will be used to protect data when upgrading contracts
     bool private readOnlyMode = false;
     // version of this contract: semver like 1.2.14 represented like 001002014
-    uint private version = 3000000;
+    uint private version = 4002000;
 
     AccountIngress private ingressContract;
 
