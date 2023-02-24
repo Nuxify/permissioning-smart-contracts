@@ -1,0 +1,84 @@
+<div id="main-container" class="content">
+    <h1>Permissioning dapp</h1>
+
+    <ng-template [ngIf]="web3js" [ngIfElse]="disconnected">
+        <span>Connected address: {{ currentAddress }}</span>
+
+        <ng-template [ngIf]="!isQbftNetwork" [ngIfElse]="qbftNetwork">
+            <h2>Connect to the QBFT Network</h2>
+        </ng-template>
+    </ng-template>
+
+    <ng-template #disconnected>
+        <div class="wallet-connect">
+            <button (click)="connect()">Connect wallet</button>
+        </div>
+    </ng-template>
+
+    <ng-template #qbftNetwork>
+        <h2>Allowed accounts</h2>
+        <div id="allowed-accounts">
+            <table>
+                <tr>
+                    <th>Address</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let account of allowedAccounts">
+                    <td>{{ account }}</td>
+                    <td><button (click)="removeAccount(account)">Remove</button></td>
+                </tr>
+            </table>
+            <form [formGroup]="addAccountForm" (ngSubmit)="addAccount()">
+                <label for="account">Account:</label>
+                <input id="account" type="text" formControlName="account" minlength="42" maxlength="42" size="36">
+                <button class="button" type="submit">Add</button>
+            </form>
+        </div>
+
+        <h2>Permissioned nodes</h2>
+        <div id="permissioned-nodes">
+            <table>
+                <tr>
+                    <th>Enode</th>
+                    <th>Host</th>
+                    <th>Port</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let node of permissionedNodes">
+                    <td>{{ node.enode }}</td>
+                    <td>{{ node.host }}</td>
+                    <td>{{ node.port }}</td>
+                    <td><button (click)="removeNode(node.enode, node.host, node.port)">Remove</button></td>
+                </tr>
+            </table>
+            <form [formGroup]="addNodeForm" (ngSubmit)="addNode()">
+                <label for="enode">Enode:</label>
+                <input id="enode" type="text" formControlName="enode" minlength="128" maxlength="128" size="115">
+                <label for="host">Host:</label>
+                <input id="host" type="text" formControlName="host" minlength="7" maxlength="15" size="10">
+                <label for="port">Port:</label>
+                <input id="port" type="text" formControlName="port" minlength="0" maxlength="5" size="2">
+                <button class="button" type="submit">Add</button>
+            </form>
+        </div>
+
+        <h2>Administrators</h2>
+        <div id="administrators">
+            <table>
+                <tr>
+                    <th>Account</th>
+                    <th></th>
+                </tr>
+                <tr *ngFor="let account of administrators">
+                    <td>{{ account }}</td>
+                    <td><button (click)="removeAdmin(account)">Remove</button></td>
+                </tr>
+            </table>
+            <form [formGroup]="addAdminForm" (ngSubmit)="addAdmin()">
+                <label for="admin">Admin:</label>
+                <input id="admin" type="text" formControlName="admin" minlength="42" maxlength="42" size="36">
+                <button class="button" type="submit">Add</button>
+            </form>
+        </div>
+    </ng-template>
+</div>

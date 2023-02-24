@@ -1,0 +1,24 @@
+th, td {
+    border: 1px solid;
+    padding: 2px;
+}
+
+table {
+    border: 1px solid;
+    margin: 0 auto;
+}
+
+#main-container {
+    text-align: center;
+}
+
+input {
+    margin: 4px;
+}
+
+#allowed-accounts, #permissioned-nodes, #administrators {
+    max-height: 75vh;
+    margin: 0 10vw;
+    overflow-y: scroll;
+    padding-bottom: 1px;
+}

@@ -1,0 +1,6 @@
+export const environment = {
+    production: true,
+    ACCOUNT_INGRESS_ADDRESS: $ENV.ACCOUNT_INGRESS_ADDRESS,
+    NODE_INGRESS_ADDRESS: $ENV.NODE_INGRESS_ADDRESS,
+    NETWORK_ID: $ENV.NETWORK_ID
+};

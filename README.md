@@ -42,16 +42,27 @@ docker run --rm --network=host --entrypoint=/bin/sh --workdir=/tmp/permissioning
 ```
 
 ### Deploying the Dapp
-1. Obtain the most recent release (tarball or zip) from the [projects release page](https://github.com/ConsenSys/permissioning-smart-contracts/releases/latest)
-2. Unpack the distribution into a folder that will be available to your webserver
-3. Add to the root of that folder a file `config.json` with the following contents
 
-_Note: The `networkID` is defined as the `chainID` in the genesis file._
+In the directory of the dapp
+
+```sh
+cd dapp/
 ```
-{
-        "accountIngressAddress":  "<Address of the account ingress contract>",
-        "nodeIngressAddress": "<Address of the node ingress contract>",
-        "networkId": "<ID of your ethereum network>"
-}
+
+we use the node 19 Docker container to generate the file of the dapp:
+
+```sh
+docker run --rm --entrypoint=/bin/sh --workdir=/tmp/dapp --volume=$PWD:/opt/dapp --env-file=dapp.env node:19-alpine3.16 -c \
+  "cp -r /opt/dapp/. .; \
+   npm install; \
+   npm run build; \
+   cp -Tr dist /opt/dapp/dist"
 ```
-4. Use a webserver of your choice to host the contents of the folder as static files directing root requests to `index.html`
+
+- **NOTE:** In the previous container we use the `dapp.env` file to pass address of the Acount Ingress contract, the address of the Node Ingress contract and the ID of the network.
+
+We can serve the files of the dapp on a nginx container with
+
+```sh
+docker run --rm --network=host --volume=$PWD/dist/app:/usr/share/nginx/html nginx:alpine
+```
