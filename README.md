@@ -38,7 +38,7 @@ docker run --rm --network=host --entrypoint=/bin/sh --workdir=/tmp/permissioning
    apk add --no-cache git && npm install --location=global truffle; \
    npm install; \
    truffle migrate --network qbft_network; \
-   cp -r dapp/src/abis /opt/permissioning-smart-contracts/dapp/src/abis"
+   cp -fr dapp/src/abis /opt/permissioning-smart-contracts/dapp/src/"
 ```
 
 ### Deploying the Dapp
