@@ -3,8 +3,28 @@ version: '3.8'
 services:
   besu-permissioning-dashboard:
     image: cupcakearmy/static
+    container_name: besu-permissioning-dashboard
     restart: unless-stopped
+    networks:
+      - proxy
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./dist/app:/srv:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.besu-permissioning-dashboard.entrypoints=http"
+      - "traefik.http.routers.besu-permissioning-dashboard.rule=Host(`testnet-permissioning-dashboard.seekscanner.com`)"
+      - "traefik.http.routers.besu-permissioning-dashboard-secure.entrypoints=https"
+      - "traefik.http.routers.besu-permissioning-dashboard-secure.rule=Host(`testnet-permissioning-dashboard.seekscanner.com`)"
+      - "traefik.http.routers.besu-permissioning-dashboard-secure.tls=true"
+      - "traefik.http.routers.besu-permissioning-dashboard-secure.tls.certresolver=http"
+      - "traefik.http.routers.besu-permissioning-dashboard-secure.service=besu-permissioning-dashboard"
+      - "traefik.http.services.besu-permissioning-dashboard.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
     ports:
       - 3000:80
-    volumes:
-      - ./dist/app:/srv:ro
+      
+networks:
+  proxy:
+    external: true
