@@ -61,8 +61,10 @@ docker run --rm --entrypoint=/bin/sh --workdir=/tmp/dapp --volume=$PWD:/opt/dapp
 
 - **NOTE:** In the previous container we use the `dapp.env` file to pass address of the Acount Ingress contract, the address of the Node Ingress contract and the ID of the network.
 
-We can serve the files of the dapp on a nginx container with
+We can serve the files of the dapp with
 
 ```sh
-docker run --rm --network=host --volume=$PWD/dist/app:/usr/share/nginx/html nginx:alpine
+docker compose up -d
 ```
+
+Served at port 3000 by default.
